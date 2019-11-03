@@ -4,7 +4,7 @@ This is based off of @pdlove homebridge-smartthings
 
 [![npm version](https://badge.fury.io/js/homebridge-smartthings-tonesto7.svg)](https://badge.fury.io/js/homebridge-smartthings-tonesto7)
 
-**```Current SmartApp version: 1.5.5```**
+**```Current SmartApp version: 1.5.9```**
 
 <br>
 
@@ -95,6 +95,7 @@ This is based off of @pdlove homebridge-smartthings
 
 ***v1.5.8*** - Merged some fixes in from @prayasb and @nberardi.
 
+***v1.5.9*** - ADT Support
 <br>
 
 ## This version is not compatible with prior versions of homebridge-smartthings Smartapp.
