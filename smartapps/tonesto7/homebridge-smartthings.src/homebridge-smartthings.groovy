@@ -231,7 +231,7 @@ def initialize() {
             subscribe(location, "hsmRules", changeHandler)
             subscribe(location, "hsmAlert", changeHandler)
             subscribe(location, "hsmSetArm", changeHandler)
-        } else { subscribe(location, "alarmSystemStatus", changeHandler) }
+        } else { subscribe(location, "securitySystemStatus", changeHandler) }
     }
     if(settings?.modeList) {
         log.debug "Registering (${settings?.modeList?.size() ?: 0}) Virtual Mode Devices"
@@ -337,7 +337,7 @@ def getSecurityDevice() {
     return [
         name: (!isST() ? "Hubitat Safety Monitor Alarm" : "Security Alarm"),
         basename: (!isST() ? "HSM Alarm" : "Security Alarm"),
-        deviceid: "alarmSystemStatus_${location?.id}",
+        deviceid: "securitySystemStatus_${location?.id}",
         status: "ACTIVE",
         manufacturerName: platform(),
         modelName: (!isST() ? "Safety Monitor" : "Security System"),
@@ -346,7 +346,7 @@ def getSecurityDevice() {
         lastTime: null,
         capabilities: ["Alarm System Status":1, "Alarm":1],
         commands: [],
-        attributes: ["alarmSystemStatus": getSecurityStatus()]
+        attributes: ["securitySystemStatus": getSecurityStatus()]
     ]
 }
 
@@ -373,7 +373,7 @@ def authError() {
 
 def getSecurityStatus(retInt=false) {
     if(isST()) {
-        def cur = location.currentState("alarmSystemStatus")?.value
+        def cur = location.currentState("securitySystemStatus")?.value
         def inc = getShmIncidents()
         if(inc != null && inc?.size()) { cur = 'alarm_active' }
         if(retInt) {
@@ -413,7 +413,7 @@ private setSecurityMode(mode) {
         }
     }
     log.info "Setting the ${isST() ? "Smart Home Monitor" : "Hubitat Safety Monitor"} Mode to (${mode})..."
-    sendLocationEvent(name: (isST() ? 'alarmSystemStatus' : 'hsmSetArm'), value: mode.toString())
+    sendLocationEvent(name: (isST() ? 'securitySystemStatus' : 'hsmSetArm'), value: mode.toString())
 }
 
 def renderConfig() {
@@ -499,7 +499,7 @@ private processCmd(devId, cmd, value1, value2, local=false) {
     log.info("Process Command${local ? "(LOCAL)" : ""} | DeviceId: $devId | Command: ($cmd)${value1 ? " | Param1: ($value1)" : ""}${value2 ? " | Param2: ($value2)" : ""}")
     def device = findDevice(devId)
     def command = cmd
-    if(settings?.addSecurityDevice != false && devId == "alarmSystemStatus_${location?.id}") {
+    if(settings?.addSecurityDevice != false && devId == "securitySystemStatus_${location?.id}") {
         setSecurityMode(command)
         CommandReply("Success", "Security Alarm, Command $command")
     }  else if (settings?.modeList && command == "mode") {
@@ -762,14 +762,14 @@ def changeHandler(evt) {
 
     switch(evt?.name) {
         case "hsmStatus":
-            deviceid = "alarmSystemStatus_${location?.id}"
-            attr = "alarmSystemStatus"
+            deviceid = "securitySystemStatus_${location?.id}"
+            attr = "securitySystemStatus"
             sendItems?.push([evtSource: src, evtDeviceName: deviceName, evtDeviceId: deviceid, evtAttr: attr, evtValue: value, evtUnit: evt?.unit ?: "", evtDate: dt])
             break
         case "hsmAlert":
             if(evt?.value == "intrusion") {
-                deviceid = "alarmSystemStatus_${location?.id}"
-                attr = "alarmSystemStatus"
+                deviceid = "securitySystemStatus_${location?.id}"
+                attr = "securitySystemStatus"
                 value = "alarm_active"
                 sendItems?.push([evtSource: src, evtDeviceName: deviceName, evtDeviceId: deviceid, evtAttr: attr, evtValue: value, evtUnit: evt?.unit ?: "", evtDate: dt])
             } else { sendEvt = false }
@@ -778,8 +778,8 @@ def changeHandler(evt) {
         case "hsmSetArm":
             sendEvt = false
             break
-        case "alarmSystemStatus":
-            deviceid = "alarmSystemStatus_${location?.id}"
+        case "securitySystemStatus":
+            deviceid = "securitySystemStatus_${location?.id}"
             sendItems?.push([evtSource: src, evtDeviceName: deviceName, evtDeviceId: deviceid, evtAttr: attr, evtValue: value, evtUnit: evt?.unit ?: "", evtDate: dt])
             break
         case "mode":

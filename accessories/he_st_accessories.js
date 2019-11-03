@@ -962,26 +962,26 @@ function HE_ST_Accessory(platform, device) {
             platform.addAttributeUsage('coolingSetpoint', device.deviceid, thisCharacteristic);
         }
         // Alarm System Control/Status
-        if (that.device.attributes['alarmSystemStatus'] !== undefined) {
+        if (that.device.attributes['securitySystemStatus'] !== undefined) {
             that.deviceGroup = 'alarm';
             thisCharacteristic = that.getaddService(Service.SecuritySystem).getCharacteristic(Characteristic.SecuritySystemCurrentState)
                 .on('get', function(callback) {
-                    // platform.log('alarm1: ' + that.device.attributes.alarmSystemStatus + ' | ' + convertAlarmState(that.device.attributes.alarmSystemStatus, true));
-                    callback(null, convertAlarmState(that.device.attributes.alarmSystemStatus, true));
+                    // platform.log('alarm1: ' + that.device.attributes.securitySystemStatus + ' | ' + convertAlarmState(that.device.attributes.securitySystemStatus, true));
+                    callback(null, convertAlarmState(that.device.attributes.securitySystemStatus, true));
                 });
-            platform.addAttributeUsage('alarmSystemStatus', device.deviceid, thisCharacteristic);
+            platform.addAttributeUsage('securitySystemStatus', device.deviceid, thisCharacteristic);
 
             thisCharacteristic = that.getaddService(Service.SecuritySystem).getCharacteristic(Characteristic.SecuritySystemTargetState)
                 .on('get', function(callback) {
-                    // platform.log('alarm2: ' + that.device.attributes.alarmSystemStatus + ' | ' + convertAlarmState(that.device.attributes.alarmSystemStatus, true));
-                    callback(null, convertAlarmState(that.device.attributes.alarmSystemStatus.toLowerCase(), true));
+                    // platform.log('alarm2: ' + that.device.attributes.securitySystemStatus + ' | ' + convertAlarmState(that.device.attributes.securitySystemStatus, true));
+                    callback(null, convertAlarmState(that.device.attributes.securitySystemStatus.toLowerCase(), true));
                 })
                 .on('set', function(value, callback) {
                     // platform.log('setAlarm: ' + value + ' | ' + convertAlarmState2(value));
                     platform.api.runCommand(callback, device.deviceid, convertAlarmState(value));
-                    that.device.attributes.alarmSystemStatus = convertAlarmState(value);
+                    that.device.attributes.securitySystemStatus = convertAlarmState(value);
                 });
-            platform.addAttributeUsage('alarmSystemStatus', device.deviceid, thisCharacteristic);
+            platform.addAttributeUsage('securitySystemStatus', device.deviceid, thisCharacteristic);
         }
     }
     this.loadData(device, that);

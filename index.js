@@ -178,7 +178,7 @@ HE_ST_Platform.prototype = {
             'Tamper Alert',
             'Alarm',
             'Alarm System Status',
-            'AlarmSystemStatus',
+            'securitySystemStatus',
             'Mode',
             'Routine',
             'Button'
